@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block style_sheet %}
+<link href="{% static 'others/faculty_home.css' %}" rel="stylesheet" />
+{% endblock style_sheet %}
+{% block title %}Home{% endblock title %}
+{% block main_code %}
+    <div class="container ">
+        <div class="row justify-content-left ">
+            <div class="col-md-4 my-5">
+                <div class="card ">
+                    <img height="321px" src="{% static 'others/images/join_us.jpg' %}" class="card-img-top my_card_image" alt="...">
+                    <div class="card-body px-4 text-center">
+                        <h5 class="card-title  mt-1">Join/Create</h5>
+                        <p class="card-text text-muted mt-3">
+                            Create Batch/ Create Class/ Join Batch/ Join Class
+                        </p>
+                        <div class="row ">
+                            <a href="{% url 'main:join_create' %}" class="btn btn-primary btn-lg col-12 buy-now-btn  ">Join/Create</a>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-4 my-5">
+                <div class="card ">
+                    <img height="321px" src="{% static 'others/images/plan_task.jpg' %}" class="card-img-top my_card_image" alt="...">
+                    <div class="card-body px-4 text-center">
+                        <h5 class="card-title  mt-1">Plan and Create Task</h5>
+                        <p class="card-text text-muted mt-3">
+                            Plan your task with an interactive calendar and create them
+                        </p>
+                        <div class="row ">
+                            <a href="{% url 'main:view_schedule' %}" class="btn btn-primary btn-lg col-5 buy-now-btn  ">Plan Now</a>
+                            <a href="{% url 'main:add_task_page' %}" class="btn btn-primary btn-lg offset-2 col-5 buy-now-btn  ">Create</a>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-4 my-5">
+                <div class="card ">
+                    <img height="321px" src="{% static 'others/images/view_tasks.jpg' %}" class="card-img-top my_card_image" alt="...">
+                    <div class="card-body px-4 text-center">
+                        <h5 class="card-title  mt-1">View Submission</h5>
+                        <p class="card-text text-muted mt-3">
+                            View Task Submissions by Student
+                        </p>
+                        <div class="row ">
+                            <a href="{% url 'main:all_classes_teacher' %}" class="btn btn-primary btn-lg col-12 buy-now-btn  ">View</a>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock main_code %}

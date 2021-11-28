@@ -1,0 +1,28 @@
+{% extends 'table_base.html' %}
+{% block table_page_heading %}
+    <div class="twelve mb-3">
+        <h1 class="my_heading text-center" style="width: 20%;">All Your Classes</h1>
+    </div>
+{% endblock table_page_heading %}
+{% block table_heading %}
+<tr >
+    <th >#</th>
+    <th>Class Name</th>
+    <th>Owner's Name</th>
+    <th>Belongs to Batch</th>
+    <th>Teacher's Class Code</th>
+    <th>Student Class Code</th>
+</tr>
+{% endblock table_heading %}
+{% block table_body %}
+    {% for curr_class in all_faculty_classes %}
+    <tr style="text-align: left;">
+        <td>{{ forloop.counter }} </td>
+        <td> <p class="link10" style="text-align: left;"><a href="{% url 'main:all_class_tasks' class_id=curr_class.id %}">{{curr_class.name}}</a></p></td>
+        <td><p class="link10" style="text-align: left;"><a href="{% url 'main:user_profile_page' user_id=curr_class.owner.id %}">{{curr_class.owner.username}}</a></p> </td>
+        <td><p class="link10" style="text-align: left;"><a href="{% url 'main:all_batch_classes_table_page' batch_id=curr_class.belongs_to_batch.id %}">{{curr_class.belongs_to_batch.name}}</a></p> </td>
+        <td>{{curr_class.class_code}}</td>
+        <td>{{curr_class.student_class_code}}</td>
+    </tr>
+    {% endfor %}
+{% endblock table_body %}

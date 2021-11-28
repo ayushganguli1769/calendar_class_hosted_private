@@ -1,0 +1,31 @@
+.mybox {
+	font-family: "Josefin Sans", sans-serif;
+	min-width: 400px;
+	width: 75%;
+	max-width: 500px;
+	border: 2px solid #000;
+	margin: 0 auto 15px;
+	text-align: center;
+	padding: 20px;
+	font-weight: bold;
+	border-radius: 10px;
+	position: relative;
+}
+
+.my_warning {
+	background: #f24954;
+	color: #ebe360;
+	border-color: #2d2d2d;
+}
+
+.my_warning:before {
+	font-family: "fontAwesome";
+	font-weight: 1400;
+	content: "!";
+	font-size: 3rem;
+	position: absolute;
+	left: 10px;
+	top: 10px;
+	text-shadow: 1px 1px 1px black;
+	transform: rotate(-5deg);
+}

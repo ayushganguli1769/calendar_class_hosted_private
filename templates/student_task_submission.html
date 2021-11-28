@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% block style_sheet %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'others/slider.css' %}">
+    <link rel="stylesheet" href="{% static 'others/file_upload/file_upload.css' %}">
+    
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.3.7/jquery.datetimepicker.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.3.7/jquery.datetimepicker.min.css">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/build/css/bootstrap-datetimepicker.css">
+    <link rel="stylesheet" href="{% static 'others/designs/title.css' %}">
+    <link rel="stylesheet" href="{% static 'others/file_list.css' %}">
+    <style>
+        /*Pushing footer to bottom*/
+            body{ height:100vh; margin:0; }
+            header{ min-height:50px; background:lightcyan; }
+            footer{ min-height:50px; background:PapayaWhip; }
+            /* Trick */
+            body{ 
+                display:flex; 
+                flex-direction:column; 
+            }
+
+            footer{
+            margin-top:auto; 
+            }
+            .clickable_table_cell{
+                cursor:pointer;
+            }
+            
+        /*Pushing footer to bottom end*/
+    </style>
+    {% endblock style_sheet %}
+{% block main_code %}
+    <div class="container">
+        <br>
+        {% if message %}
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>{{message}}</strong> 
+        </div>
+        {% endif %}
+        <div class="eight">
+            <h1>{{curr_task.name}}</h1>
+        </div>
+        <div class="mt-5">
+            <form method="post" action="/student_submit_task/{{curr_task.id}}/" enctype="multipart/form-data" >
+                {% csrf_token %}
+                <input type="hidden" name="task_id_hidden" value="{{curr_task.id}}">
+                <div class="row">
+                    <div  class="{% if request.user.extended_reverse.is_student %} col-8 {% else %} col-12 {% endif %}">
+                        <textarea id="myTextArea" class="mceEditor m-3" style="height: 50%;">{{curr_task.description}} </textarea>
+                        <div id="file_list_container" class="m-3">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr style="background-color: #eb5d1e; color: white;" class="text-center">
+                                        <th>FILE LIST</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for curr_file_obj in all_task_files %}
+                                        <tr>
+                                            <td class="text-center clickable_table_cell table-warning" onclick="window.location.href='{{curr_file_obj.stored_file.url}}' ">
+                                                {{curr_file_obj.name}}
+                                            </td>
+                                        </tr>                                   
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    {% if request.user.extended_reverse.is_student %}
+                    
+                    <div class="col-4">
+                        <div class="file-uploader " >
+                            <div class="file-uploader__message-area">
+                              <p>Select a file to upload</p>
+                            </div>
+                            <div class="file-chooser">
+                              <input class="file-chooser__input" type="file" multiple>
+                            </div>
+                            <button class="file-uploader__submit-button  text-center" name="submit_task_button" value="Upload">SUBMIT TASK</button>
+                        </div>
+                    </div>
+
+                    {% endif %}
+
+    
+                </div>           
+            </form>
+        </div>
+    </div>
+{% endblock main_code %}
+{% block java_script %}
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <!--
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.3/jquery-ui-timepicker-addon.min.js"></script>
+    -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.3.7/jquery.datetimepicker.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.3.7/jquery.datetimepicker.min.js"></script>
+    <script type="text/javascript">
+        
+
+        function content() {
+        alert(tinyMCE.get('myTextArea').getContent());
+        tinyMCE.get('myTextArea').setContent("<p>Testing 123</p>")
+    }
+
+    </script>
+    <script>
+        window.onload = create_calendar_input()
+        function create_calendar_input(){
+            $(".date_picker_class").each(
+                function(){
+                    $(this).datetimepicker({ 
+                        showSecond: false,
+                        changeYear: true ,
+                        changeMonth: true,
+                        yearRange: "-120:+40",
+                    })
+                }
+            )
+        }
+    </script>
+    <script src="{% static 'others/file_upload/file_upload.js' %}"></script>
+    <script>
+        tinyMCE.init({
+            mode : "specific_textareas",
+            readonly : 1,
+            menubar: false,
+            statusbar: false,
+            toolbar: false,
+            editor_selector : "mceEditor",   //<<<---- 
+            plugins: 'autoresize',
+        });
+    </script>
+    <script src="{% static 'others/add_task.js' %}"></script>
+    <script src="{% static 'others/slider.js' %}"></script>
+{% endblock java_script %}

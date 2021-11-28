@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block style_sheet %}
+<link href="{% static 'others/faculty_home.css' %}" rel="stylesheet" />
+{% endblock style_sheet %}
+{% block title %}Home{% endblock title %}
+{% block main_code %}
+    <div class="container ">
+        <div class="row justify-content-center ">
+            <div class="col-md-4 my-5">
+                <div class="card ">
+                    <img height="321px" src="{% static 'others/images/join_us.jpg' %}" class="card-img-top my_card_image" alt="...">
+                    <div class="card-body px-4 text-center">
+                        <h5 class="card-title  mt-1">Join/Create</h5>
+                        <p class="card-text text-muted mt-3">
+                            Join Batch/ Join Individual Class
+                        </p>
+                        <div class="row ">
+                            <a href="{% url 'main:join_class_batch_student' %}" class="btn btn-primary btn-lg col-12 buy-now-btn  ">Join</a>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            
+            <div class="col-md-4 my-5 offset-2">
+                <div class="card ">
+                    <img height="321px" src="{% static 'others/images/submission1.jpg' %}" class="card-img-top my_card_image" alt="...">
+                    <div class="card-body px-4 text-center">
+                        <h5 class="card-title  mt-1">Submit Tasks</h5>
+                        <p class="card-text text-muted mt-3">
+                            Submit Your Work
+                        </p>
+                        <div class="row ">
+                            <a href="{% url 'main:all_user_batches' %}" class="btn btn-primary btn-lg col-12 buy-now-btn  ">Submit</a>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock main_code %}

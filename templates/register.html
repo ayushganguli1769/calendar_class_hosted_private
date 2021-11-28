@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block title %}SignUp{% endblock title %}
+{% block style_sheet %}
+    {% load static %}
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="{% static 'colorlib/fonts/material-icon/css/material-design-iconic-font.min.css' %}">
+    <!-- Main css -->
+    <link rel="stylesheet" href="{% static 'colorlib/css/style_register.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+
+
+{% endblock style_sheet %}
+{% block main_code %}
+    <div class="main" style="padding:0px;">
+
+        <!-- Sign up form -->
+        <section class="signup" style="padding:0px">
+            <div class="my_container">
+                <div class="signup-content" style="padding-top: 25px; padding-bottom: 25px;">
+                    <div class="signup-form">
+                        <h2 class="form-title">Sign up </h2>
+                        <form method="POST" class="register-form" id="register-form" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                                <input type="text" name="username" id="name" placeholder="Username"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="first_name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                                <input type="text" name="first_name" id="first_name" placeholder="first name"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                                <input type="text" name="last_name" id="last_name" placeholder="last name"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="email"><i class="zmdi zmdi-email"></i></label>
+                                <input type="email" name="email" id="email" placeholder="Your Email"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="pass"><i class="zmdi zmdi-lock"></i></label>
+                                <input type="password" name="password1" id="pass" placeholder="Password"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="re-pass"><i class="zmdi zmdi-lock-outline"></i></label>
+                                <input type="password" name="password2" id="re_pass" placeholder="Repeat your password"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="calendar_date"><i class="fa fa-calendar" style="font-size:18px"></i></label>
+                                <input type="text" name="date_of_birth" id="datepicker" placeholder="date of birth">
+                            </div>
+                            <div class="form-group">
+                                <label for="profile_photo"><i class="zmdi zmdi-image"></i></label>
+                                <input type="file" name="profile_photo"  >
+                            </div>
+                            <div class="form-group">
+                                <input type="radio" name="type_of_user"  class="agree-term" value="faculty" />
+                                <label for="type_of_user" class="label-agree-term" ><span><span></span></span>I am a faculty</label>
+                                <input type="radio" name="type_of_user"  class="agree-term" value="student" />
+                                <label for="type_of_user" class="label-agree-term"><span><span></span></span>I am a student</label>
+                            </div>
+                            <div class="form-group">
+                                <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />
+                                <label for="agree-term" class="label-agree-term"><span><span></span></span>I agree all statements in  <a href="#" class="term-service">Terms of service</a></label>
+                            </div>
+                            <div class="form-group form-button">
+                                <input type="submit" name="register" id="signup" class="form-submit" value="Register"/>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="signup-image">
+                        <figure><img src="{% static 'colorlib/images/signup-image.jpg' %}" alt="sing up image"></figure>
+                        <a href="#" class="{% static 'colorlib/signup-image-link' %}">I am already member</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock main_code %}
+{% block java_script %}
+    <script src="{% static 'colorlib/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'colorlib/js/main.js' %}"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+    <script>
+    
+        $( function() {
+          $( "#datepicker" ).datepicker({ 
+              changeYear: true ,
+              changeMonth: true,
+              yearRange: "-120:+40",
+            });
+        } );
+    </script>
+    
+{% endblock java_script %}

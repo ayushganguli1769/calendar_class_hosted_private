@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block style_sheet %}
+    {% load static %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="{% static 'others/data_table/data_table.css' %}">
+
+{% endblock style_sheet %}
+{% block main_code %}
+<div class="col-10 justify-content-center mt-5 mb-5 rounded my_table_container">
+    {% block table_page_heading %}
+
+    {% endblock table_page_heading %}
+
+    <table id="example" class="display compact hover row-border mt-5" style="width:100%">
+        <thead class="thead-dark">
+            <!--
+            <tr >
+                <th class="col-1">#</th>
+                <th>Name</th>
+                <th>Age</th>
+            </tr>
+            -->
+            {% block table_heading %}
+                
+            {% endblock table_heading %}
+        </thead>
+        <tbody id="showData">
+
+            {% block table_body %}
+            
+            {% endblock table_body %}
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock main_code %}
+{% block java_script %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#example").dataTable();
+        });
+            
+    </script>
+    <!--<script src="{% static 'others/data_table/data_table.js' %}"> </script>-->
+{% endblock java_script %}

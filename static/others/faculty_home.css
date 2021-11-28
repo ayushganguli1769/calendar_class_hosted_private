@@ -1,0 +1,29 @@
+/* Global Rules */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    font-size: 13px;
+    line-height: 1.8;
+    color: #222;
+    background: #FFFFE0	;
+ }
+
+
+/* End Global Rules  */
+
+.buy-now-btn {
+    background-color: #1e1fcd;
+    box-shadow: 0px 5px 12px 0px #1e1fcd4d;
+}
+
+.plan {
+    background-color: #efefef;
+}
+.card-title{
+    font-weight: bolder;
+}

@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load tz %}
+{% block style_sheet %}
+    <link rel="stylesheet" href="{% static 'others/join_create.css' %}"/>
+    <link rel="stylesheet" href="{% static 'others/body_style.css' %}"/>
+    <link rel="stylesheet" href="{% static 'others/data_table/data_table.css' %}">
+    <style>
+        /*Pushing footer to bottom*/
+            body{ height:100vh; margin:0; }
+            header{ min-height:50px; background:lightcyan; }
+            footer{ min-height:50px; background:PapayaWhip; }
+            /* Trick */
+            body{ 
+                display:flex; 
+                flex-direction:column; 
+            }
+
+            footer{
+            margin-top:auto; 
+            }
+            .clickable_table_cell{
+                cursor:pointer;
+            }
+            
+        /*Pushing footer to bottom end*/
+    </style>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="{% static 'others/data_table/data_table.css' %}">
+{% endblock style_sheet %}
+{% block title %}
+    Join/Create
+{% endblock title %}
+{% block main_code %}
+<div class="nine mt-2">
+    <h1>{{curr_class.name}} Class<span>From Batch {{curr_class.belongs_to_batch.name}}</span></h1>
+</div>
+    <div class="container mt-2" id="my_container" >
+    <div class="row justify-content-center">
+
+        <div class="col-12 mr-auto">
+        <!-- Tabs with Background on Card -->
+        <div class="card">
+            <div class="card-header">
+            <ul class="nav nav-tabs nav-tabs-neutral justify-content-center" role="tablist" data-background-color="orange">
+                <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#all_tasks_for_class" role="tab">Tasks</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#all_students_in_class" role="tab">Students</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#all_teachers_in_class" role="tab">Teachers</a>
+                </li>
+            </ul>
+            </div>
+            <div class="card-body">
+            <!-- Tab panes -->
+            <div class="tab-content ">
+                <div class="main_tab_content tab-pane active m-3" id="all_tasks_for_class" role="tabpanel" >
+                    <table id="example" class="display compact hover row-border mt-5 data_table_class" style="width:100%">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th >#</th>
+                                <th>Name</th>
+                                <th>Start Time</th>
+                                <th>Submission Time</th>
+                                <th>Stress Level</th>
+                                {% if request.user.extended_reverse.is_student == False %} <th>Delete Task</th>{% endif %}
+                                <th>View Submissions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="showData">
+                            {% for curr_task in all_tasks %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td> <p class="link10" style="text-align: left;"><a href="{% url 'main:student_task_submission' task_id=curr_task.id %}">{{curr_task.name}}</a></p></td><!--view task-->
+                                    <td>{{curr_task.start_time|localtime }} </td>
+                                    <td>{{curr_task.end_time|localtime }}</td>
+                                    <td>{{curr_task.stress_level}}</td>
+                                    {% if request.user.extended_reverse.is_student == False %}
+                                        <td><button href="#" class="btn btn-danger btn-sm" data-taskid="{{curr_task.id}}" onclick="delete_task(this)">DELETE</button></td>
+                                    {% endif %}
+                                    <td><button href="#" onclick="window.location.href= '{% url 'main:all_submissions_for_task' task_id=curr_task.id show_all=0 %}' " class="btn btn-success btn-sm" data-taskid="{{curr_task.id}}" >VIEW</button></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane main_tab_content" id="all_students_in_class" role="tabpanel">
+                    <!--All students in class Table list-->
+                    <table id="example" class="display compact hover row-border mt-5 data_table_class" style="width:100%">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody id="showData">
+                            {% for curr_student in all_students %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td><p class="link10" style="text-align: left;"><a href="#">{{curr_student.username}}</a></p></td>
+                                    <td>{{curr_student.email}}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane main_tab_content" id="all_teachers_in_class" role="tabpanel">
+                    <table id="example" class="display compact hover row-border mt-5 data_table_class" style="width:100%">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody id="showData">
+                            {% for curr_faculty in all_faculties %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td><p class="link10" style="text-align: left;"><a href="#">{{curr_faculty.username}}</a></p></td>
+                                    <td>{{curr_faculty.email}}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            </div>
+        </div>
+        <!-- End Tabs on plain Card -->
+        </div>
+    </div>
+    </div>
+
+
+
+{% endblock main_code %}
+{% block java_script %}
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function(){
+        //$("#example").dataTable();
+        $(".data_table_class").each(
+            function(){
+                $(this).dataTable()
+            }
+        )
+    });
+        
+</script>
+<script>
+    function delete_task(curr_event){
+    let curr_button = curr_event
+    let curr_row = curr_button.parentElement.parentElement
+    let curr_task_id = curr_button.getAttribute('data-taskid')
+    let url = `/delete_task/${curr_task_id}/`
+    fetch(url,{
+        method:'POST',
+        credentials: 'same-origin',
+    }).then(
+        response => response.json()
+    ).then(
+        data =>{
+            if (data['is_success'] === true){
+                curr_row.remove()
+                console.log(data['message'])
+            }
+            else{
+                console.log(data['message'])
+            }
+        }
+    )        
+}
+</script>
+<!--<script src="{% static 'others/data_table/data_table.js' %}"> </script>-->
+
+{% endblock java_script %}

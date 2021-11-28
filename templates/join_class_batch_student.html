@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block style_sheet %}
+    <link rel="stylesheet" href="{% static 'others/join_create.css' %}"/>
+    <link rel="stylesheet" href="{% static 'others/body_style.css' %}"/>
+    <style>
+        #footer{
+        position : absolute;
+        bottom : 0;
+        height : 40px;
+        margin-top : 40px;
+        width: 100%;
+        }
+        #my_container{
+            transform: translate(0%,15%);
+        }
+        .main_tab_content{
+            min-height: 250px !important;
+            max-height: 400px !important;
+            overflow-y: scroll !important;
+        }
+    </style>
+{% endblock style_sheet %}
+{% block title %}
+    Join/Create
+{% endblock title %}
+{% block main_code %}
+    <div class="container mt-5" id="my_container" >
+    <div class="row justify-content-center">
+
+        <div class="col-md-10 ml-auto col-xl-9 mr-auto">
+        <!-- Tabs with Background on Card -->
+        <div class="card">
+            <div class="card-header">
+            <ul class="nav nav-tabs nav-tabs-neutral justify-content-center" role="tablist" data-background-color="orange">
+                <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#join_batch" role="tab">Join Batch</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#join_class" role="tab">Join Class</a>
+                </li>
+            </ul>
+            </div>
+            <div class="card-body">
+            <!-- Tab panes -->
+            <div class="tab-content ">
+                <div class="main_tab_content tab-pane active" id="join_batch" role="tabpanel" >
+                    <div class="container col-6 justify-content-center p-4 border border-dark rounded" >
+                        <div class="row justify-content-left ">
+                            <div class="col-12 mt-2">
+                                <h5 class="fw-bold pb-0 mb-0">Enter the 10 digit Student's Batch Code<br/></h5>
+                                <input type="text" class="form-control " id="batch_code_main"  placeholder="Student's Batch Code">
+                            </div>
+                            <button type="button" id="join_batch_button" class="btn btn-primary mt-3 waves-effect waves-light" onclick="join_batch()">JOIN BATCH</button>
+                        </div>
+                    </div>
+                    <div class="container col-7 justify-content-center mt-3 pb-0 " id="alert_div_join_batch"> </div>
+                    <div class="container col-6 justify-content-center p-2 " >
+                        <div class="row justify-content-left ">
+                            <span class="fw-bold"> To sign in with a batch code</span>
+                            <ul class="offset-1">
+                                <li>Use an authorized batch code as provided to you</li>
+                                <li>Do not use spaces , check for caps lock while entering code</li>
+                                <li>Please do not spam after joining a batch</li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane main_tab_content" id="join_class" role="tabpanel">
+                    <div class="container col-6 justify-content-center p-4 border border-dark rounded" >
+                        <div class="row justify-content-left ">
+                            <div class="col-12 mt-2">
+                                <h5 class="fw-bold pb-0 mb-0">Enter the 10 digit Studen's Class Code<br/></h5>
+                                <input type="text" class="form-control "  placeholder="Class Code" id="class_code_main">
+                            </div>
+                            <button type="button" id="join_class_button" class="btn btn-primary mt-3 waves-effect waves-light" onclick="join_class()">JOIN CLASS</button>
+                        </div>
+                    </div>
+                    <div class="container col-7 justify-content-center mt-3 pb-0 " id="alert_div_join_class"></div>
+                    <div class="container col-6 justify-content-center p-2 " >
+                        <div class="row justify-content-left ">
+                            <span class="fw-bold"> To sign in with a class code</span>
+                            <ul class="offset-1">
+                                <li>Use an authorized class code as provided to you</li>
+                                <li>Do not use spaces , check for caps lock while entering code</li>
+                                <li>Please do not spam after joining a class</li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        <!-- End Tabs on plain Card -->
+        </div>
+    </div>
+    </div>
+
+
+
+{% endblock main_code %}
+{% block java_script %}
+<script src="{% static 'others/join_batch_class_student.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+{% endblock java_script %}

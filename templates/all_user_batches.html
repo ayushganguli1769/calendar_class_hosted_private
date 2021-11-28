@@ -1,0 +1,38 @@
+{% extends 'table_base.html' %}
+{% block table_page_heading %}
+    <div class="twelve mb-3">
+        <h1 class="my_heading text-center" style="width: 20%;">All Your Batches</h1>
+    </div>
+{% endblock table_page_heading %}
+{% block table_heading %}
+<tr >
+    <th>Batch Name</th>
+    <th>Owner's Name</th>
+    <th>Student Batch Code</th>
+    {% if request.user.extended_reverse.is_student %}
+    
+    {% else %}
+    <th> Teacher's Batch Code </th>
+    {% endif %}
+</tr>
+{% endblock table_heading %}
+{% block table_body %}
+    {% if request.user.extended_reverse.is_student %}
+        <tr>
+            <td> <p class="link10" style="text-align: left;"><a href="{% url 'main:anonymous_classes' %}">All Your Anonymous Classes</a></p></td>
+            <td style="text-align: left;">Not Applicable</td>
+            <td style="text-align: left;">Not Applicable</td>
+        </tr>
+    {% endif %}
+    {% for curr_batch in all_batches %}
+    <tr style="text-align: left;">
+        <td> <p class="link10" style="text-align: left;"><a href="{% url 'main:all_batch_classes_table_page' batch_id=curr_batch.id %}">{{curr_batch.name}}</a></p></td>
+        <td><p class="link10" style="text-align: left;"><a href="{% url 'main:user_profile_page' user_id=curr_batch.owner.id %}">{{curr_batch.owner.username}}</a></p> </td>
+        <td>{{curr_batch.batch_code_student}}</td>
+        {% if request.user.extended_reverse.is_student %}
+        {% else %}
+            <td>{{curr_batch.batch_code_teacher}}</td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+{% endblock table_body %}

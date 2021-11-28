@@ -1,0 +1,15 @@
+
+.progress {
+    position:relative;
+    height:70px;
+  }
+  .raised {
+    position:absolute;
+    left:10px;
+    top:9px;
+  }
+  .goal {
+    position:absolute;
+    right:10px;
+    top:9px;
+  }

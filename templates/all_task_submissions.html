@@ -1,0 +1,35 @@
+{% extends 'table_base.html' %}
+{% block table_page_heading %}
+    <div class="twelve mb-3">
+        <h1 class="my_heading text-center" style="width: 50%">
+            {% if request.user.extended_reverse.is_student %}
+            All Your Submissions for {{curr_task.name}}
+            {% else %}
+            All Submissions for {{curr_task.name|truncatechars:32}} 
+            {% endif %}
+            
+        </h1>
+        {% if  view_all  == False %}
+            <a href="/all_submissions_for_task/{{curr_task.id}}/1/" class="btn btn-primary" style="float: right; transform: translateY(-115%);">View All</a>
+        {% endif %}
+    </div>
+{% endblock table_page_heading %}
+{% block table_heading %}
+<tr>
+    <th>#</th>
+    <th>Submission Link</th>
+    <th>Time of Submission</th>
+    <th>Grade</th>
+</tr>
+{% endblock table_heading %}
+{% block table_body %}
+    {% load tz %}
+    {% for curr_submission in filtered_submissions %}
+    <tr>
+        <td>{{ forloop.counter }} </td>
+        <td> <p class="link10" style="text-align: left;"><a href="{% url 'main:grade_view_submitted_task' submission_id=curr_submission.id %}" target="_blank">{{curr_submission.belongs_to_user.username}} submission for {{curr_task.name}}</a></p></td>
+        <td>{{curr_submission.submission_time|localtime}}</td>
+        <td>{% if curr_submission.grade %}{{curr_submission.grade|truncatechars:20}} {% else %} Not Graded{% endif %}</td>
+    </tr>
+    {% endfor %}
+{% endblock table_body %}

@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% load tz %}
+{% block style_sheet %}
+    <style>
+        /*Pushing footer to bottom*/
+            body{ height:100vh; margin:0; }
+            header{ min-height:50px; background:lightcyan; }
+            footer{ min-height:50px; background:PapayaWhip; }
+            /* Trick */
+            body{ 
+                display:flex; 
+                flex-direction:column; 
+            }
+
+            footer{
+            margin-top:auto; 
+            }
+            .clickable_table_cell{
+                cursor:pointer;
+            }
+            
+        /*Pushing footer to bottom end*/
+    </style>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'others/headings.css' %}">
+{% endblock style_sheet %}
+{% block main_code %}
+    <div class="container mt-5 mb-5">
+        <div class="row mb-2">
+            <div class="col-8">
+                <table class="col-8 table table-bordered table-hover">
+                    <tr>
+                        <td class="col-4" style="background-color: #eb5d1e; color: white; font-weight: bolder;">
+                            Name
+                        </td>
+                        <td class="table-warning col-8">
+                            {{curr_submission.belongs_to_user.username}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-4" style="background-color: #eb5d1e; color: white; font-weight: bolder;">
+                            Task Name
+                        </td>
+                        <td class="table-warning col-8">
+                            {{curr_submission.for_which_task.belongs_to_class.name}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-4" style="background-color: #eb5d1e; color: white; font-weight: bolder;">
+                            Batch Name
+                        </td>
+                        <td class="table-warning col-8">
+                            {{curr_submission.for_which_task.belongs_to_class.belongs_to_batch.name}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-4" style="background-color: #eb5d1e; color: white; font-weight: bolder;">
+                            Class Name
+                        </td>
+                        <td class="table-warning col-8">
+                            {{curr_submission.for_which_task.name}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-4" style="background-color: #eb5d1e; color: white; font-weight: bolder;">
+                            Deadline
+                        </td>
+                        <td class="table-warning col-8">
+                            {{submission_time|localtime}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-4" style="background-color: #eb5d1e; color: white; font-weight: bolder;">
+                            User Submission Time
+                        </td>
+                        <td class="table-warning col-8">
+                            {{curr_submission.submission_time|localtime}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-4" style="background-color: #eb5d1e; color: white; font-weight: bolder;">
+                            Late Submission
+                        </td>
+                        <td class="table-warning col-8">
+                            {% if late_submission %}Yes,submitted late {% else %}No, submission on time{% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-4" style="background-color: #eb5d1e; color: white; font-weight: bolder;">
+                            Grade
+                        </td>
+                        <td class="table-warning col-8">
+                            {% if curr_submission.grade %} {{curr_submission.grade}} {% else %}Not Graded{% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-4" style="background-color: #eb5d1e; color: white; font-weight: bolder;">
+                            Remarks
+                        </td>
+                        <td class="table-warning col-8">
+                            {% if curr_submission.remark %} {{curr_submission.remark}} {% else %}No, remarks yet!{% endif %}
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+        <div class="three mb-3">
+            <h1 class="my_heading">Files Submitted</h1>
+        </div>
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr style="background-color: #eb5d1e; color: white;" class="text-center">
+                    <th>All Files Submitted</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for curr_file_obj in all_submission_files %}
+                    <tr>
+                        <td class="text-center clickable_table_cell table-warning" onclick="window.location.href='{{curr_file_obj.stored_file.url}}' ">
+                            {{curr_file_obj.name}}
+                        </td>
+                    </tr>                                   
+                {% endfor %}
+            </tbody>
+        </table>
+  
+        {% if view_only == False  %}
+            <div class="three mb-3">
+                <h1 class="my_heading">Grading Form</h1>
+            </div>
+            <form method="post" >
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Grade</label>
+                    <div class="row">
+                        <div class="col-3">
+                            <input type="text" class="form-control" name="grade_form_input" value="{% if curr_submission.grade  %}  {{curr_submission.grade}} {% endif %} ">
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Remark</label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="6" name="remark_form_input" >{% if curr_submission.remark %}  {{curr_submission.remark}} {% endif %}</textarea>
+                </div>
+                <div class="row ">
+                    <div class="col-6">
+                        <button class="btn btn-success col-5" name="grade_task_button">GRADE Task</button>
+                    </div>
+                </div>
+                
+            </form>     
+        {% endif %}
+        
+    </div>
+{% endblock main_code %}

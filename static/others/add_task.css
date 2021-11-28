@@ -1,0 +1,14 @@
+#myTextArea {
+    height:75vh;
+    resize: none; /* Remove this if you want the user to resize the textarea */
+}
+footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: var(--footer-height);
+    color: white;
+    font-weight: 700;
+    background-image: linear-gradient(70deg, yellow 0%, orange 25%, teal 25%, cyan 50%, red 50%, magenta 75%, black 75%, grey 100%);
+    /* background-image: linear-gradient(70deg, black 0%, cyan 100%); */
+  }

@@ -1,0 +1,271 @@
+{% extends 'base.html' %}
+{% block style_sheet %}
+    {% load static %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="{% static 'others/body_style.css' %}">
+    <link rel="stylesheet" href="{% static 'others/calendar/calendar.css' %}">
+    <link rel="stylesheet" href="{% static 'others/stress_level.css' %}">
+    <style>
+        body{ height:100vh; margin:0; }
+
+        header{ min-height:50px; background:lightcyan; }
+        footer{ min-height:50px; background:PapayaWhip; }
+
+        /* Trick */
+        body{ 
+            display:flex; 
+            flex-direction:column; 
+        }
+
+        footer{
+        margin-top:auto; 
+        }
+        .faq-section .mb-0 > a {
+            display: block;
+            position: relative;
+        }
+
+        .faq-section .mb-0 > a:after {
+            content: "\f067";
+            font-family: "Font Awesome 5 Free";
+            position: absolute;
+            right: 0;
+            font-weight: 600;
+        }
+
+        .faq-section .mb-0 > a[aria-expanded="true"]:after {
+            content: "\f068";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 600;
+        }
+        #heading-2{
+            background-color: #1138BE;
+        }
+        #collapse_link{
+            color: white;
+            /*font-size: larger;*/
+            font-weight: bold;
+            text-decoration: none;
+        }
+        #my_collapse_body{
+            background-color: #FFAA1D;
+            color: white;
+            font-weight: bold;
+        }
+        a.disabled {
+            pointer-events: none;
+            }
+    </style>
+{% endblock style_sheet %}
+{% block title %}
+    Task Planner
+{% endblock title %}
+{% block main_code %}
+<input type="hidden" name="user_id_hidden" id="user_id_hidden" value="{{request.user.id}}">
+<!-- Modal -->
+<div class="modal  fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable  modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="staticBackdropLabel">Tasks for 24th November 2021</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <div class="container">
+            <table class="table table-striped mt-3 mb-3" id="task_list_day_table_modal">
+                <thead>
+                    <tr>
+                      <th scope="col" class="col-1">#</th>
+                      <th scope="col" class="col-5">Task</th>
+                      <th scope="col" class="col-2">Class</th>
+                      <th scope="col" class="col-3">Class Faculty Head</th>
+                      <th scope="col" class="col-1">Delete Task</th>
+                    </tr>
+                  </thead>
+                  <tbody id="task_particular_day_list_modal">
+                    <tr>
+                        <td scope="col" class="col-1">#</td>
+                        <td scope="col" class="col-5">Task</td>
+                        <td scope="col" class="col-2">Class</td>
+                        <td scope="col" class="col-3">Class Faculty Head</td>
+                        <td scope="col" class="col-1">Delete Task</td>
+                      </tr>
+                  </tbody>
+            </table>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--end modal-->
+<div class="container my_container mt-3 mb-4 p-4" >
+    <div class="row m-3">
+        <div class="col-3">
+            <h6 class="fw-bold pb-0 mb-0">Select Batch Name to view its calendar planner</h6>
+        </div>
+        <div class="col-3">
+            <input list="list_batch_name" id="batch_name" name="batch_name" class="form-control" placeholder="batch name">
+            <datalist  id="list_batch_name" style="max-height: 25%;">
+                {% for curr_batch in request.user.all_batch_user_belongs.all %}
+                    <option data-value="{{curr_batch.batch_code_teacher}}" value="{{curr_batch.name}}">Batch Code:{{curr_batch.batch_code_teacher}}</option>
+                {% endfor %}
+            </datalist>
+        </div>
+    </div>
+    <div class="row m-3">
+        <div class="col-3">
+            <h6 class="fw-bold pb-0 mb-0">Select the start date of the probable interval to schedule task</h6>
+        </div>
+        <div class="col-3">
+            <div class="row">
+                <div class="col-2">
+                    <label for="calendar_date"><i class="fa fa-calendar" style="font-size:39px"></i></label>
+                </div>
+                <div class="col-10">
+                    <input type="text" name="interval_start_date" id="interval_start_date" placeholder="interval start date" class="form-control date_picker_class">
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <div class="row m-3">
+        <div class="col-3">
+            <h6 class="fw-bold pb-0 mb-0">Select the end date of the probable interval to schedule task</h6>
+        </div>
+        <div class="col-3">
+            <div class="row">
+                <div class="col-2">
+                    <label for="calendar_date"><i class="fa fa-calendar" style="font-size:39px"></i></label>
+                </div>
+                <div class="col-10">
+                    <input type="text" name="interval_end_date" id="interval_end_date" placeholder="interval end date" class="form-control date_picker_class">
+                </div>
+            </div>
+            
+        </div>
+        <div class="row">
+            <div class="col-7" id="alert_div_optimal_date_string">
+                <!--optimal date here-->
+            </div>
+        </div>
+  
+
+        <div id="accordion">
+            <div class="card col-8 mt-4">
+            <div class="card-header text-center" id="heading-2">
+                <h5 class="mb-0 bold">
+                <a class="collapsed  " data-bs-toggle="collapse" href="#collapseTwo" id="collapse_link">
+                    Show Weight Parameters <i class="fa fa-plus justify-content-end " style="float: right;"></i>
+                </a>
+                </h5>
+    
+            </div>
+            <div id="collapseTwo" class="collapse" data-bs-parent="#accordion">
+                <div class="card-body" id="my_collapse_body">
+                <div class="row mt-2">
+                    <div class="col-6">
+                    <label for="days_before">Number of days before considered</label>
+                    </div>
+                    <div class="col-2 ">
+                    <input type="number" class="form-control" id="days_before" value="2">
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-6">
+                    <label for="days_after">Number of days after considered</label>
+                    </div>
+                    <div class="col-2 ">
+                    <input type="number" class="form-control" id="days_after" value="3">
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    <center>
+        <div class="btn-group col-6">
+            <button type="button" class="btn btn-success col-6" onclick="window.location.href = '{% url 'main:add_task_page' %}' ">CREATE TASK</button>
+            <button type="button" class="btn btn-danger col-6" onclick="my_show_calendar_plan(this)">SHOW CALENDAR PLAN</button>
+        </div>
+    </center>
+    <!--
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Launch static backdrop modal
+    </button>
+    -->
+</div>
+<div class="calendar_wrapper">
+
+    <div class="container-calendar">
+        <h3 id="monthAndYear"></h3>
+        
+        <div class="button-container-calendar">
+            <div class="footer-container-calendar">    <button id="previous" onclick="previous()">&#8249;</button>
+            
+                <label for="month">Jump To: </label>
+                <select id="month" onchange="jump()">
+                    <option value=0>Jan</option>
+                    <option value=1>Feb</option>
+                    <option value=2>Mar</option>
+                    <option value=3>Apr</option>
+                    <option value=4>May</option>
+                    <option value=5>Jun</option>
+                    <option value=6>Jul</option>
+                    <option value=7>Aug</option>
+                    <option value=8>Sep</option>
+                    <option value=9>Oct</option>
+                    <option value=10>Nov</option>
+                    <option value=11>Dec</option>
+                </select>
+                <select id="year" onchange="jump()"></select>       
+        
+            <button id="next" onclick="next()">&#8250;</button>
+        </div>
+            </div>
+        <table class="table-calendar" id="calendar" data-lang="en">
+            <thead id="thead-month"></thead>
+            <tbody id="calendar-body"></tbody>
+        </table>
+    </div>
+    
+</div>
+
+
+{% endblock main_code %}
+{% block java_script %}
+    <script src="{% static 'colorlib/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'colorlib/js/main.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+    <script>
+        window.onload = create_calendar_input()
+
+            localStorage.clear()
+            localStorage.setItem( 'calendar_dict',JSON.stringify( {}  ) )
+            localStorage.setItem('max_weight', '0' )
+        
+        function create_calendar_input(){
+            $(".date_picker_class").each(
+                function(){
+                    $(this).datepicker({ 
+                        changeYear: true ,
+                        changeMonth: true,
+                        yearRange: "-120:+40",
+                    })
+                }
+            )
+        }
+    </script>
+    <script>
+        $('.card-header').click(function() {
+            $(this).find('i').toggleClass('fa fa-plus fa fa-minus');
+        });
+      </script>
+    <script src="{% static 'others/calendar/calendar.js' %}"></script>
+    
+{% endblock java_script %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block style_sheet %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'others/error_message.css' %}">
+    <style>
+        /*Pushing footer to bottom*/
+        body{ height:100vh; margin:0; }
+        header{ min-height:50px; background:lightcyan; }
+        footer{ min-height:50px; background:PapayaWhip; }
+        /* Trick */
+        body{ 
+            display:flex; 
+            flex-direction:column; 
+            background: #FFFFE0	
+        }
+
+        footer{
+        margin-top:auto; 
+        }
+    </style>
+{% endblock style_sheet %}
+{% block main_code %}
+    <div class="mybox my_warning col-12 position-absolute top-50 start-50 translate-middle p-5 rounded">
+        <div class="mybox-content">
+            <p>
+            {{message}}
+            </p>
+        </div>
+    </div>
+{% endblock main_code %}

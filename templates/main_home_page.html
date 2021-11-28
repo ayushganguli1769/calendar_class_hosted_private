@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Eduvation</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+    {% load static %}
+  <!-- Favicons -->
+  <link href="{% static 'others/images/favicon/bulb32.png' %}" rel="icon">
+  <link href="{% static 'others/images/favicon/bulb16.png' %}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'bootstrap_template/assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'bootstrap_template/assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'bootstrap_template/assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'bootstrap_template/assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'bootstrap_template/assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'bootstrap_template/assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="{% static 'bootstrap_template/assets/css/style.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+
+
+</head>
+
+<body>
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex align-items-center justify-content-between">
+
+      <div class="logo">
+        <h1 class="text-light"><a href="/"><span>Eduvation</span></a></h1>
+        <!-- Uncomment below if you prefer to use an image logo -->
+        <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+      </div>
+
+      <nav id="navbar" class="navbar">
+        {% if user.is_authenticated %}
+          {% if request.user.extended_reverse.is_student %}
+            <ul>
+              <li><a class="nav-link scrollto" href="/">Main Page</a></li>
+              <li><a class="nav-link " href="{% url 'main:student_home' %}">Home</a></li>
+              <li><a class="nav-link scrollto" href="{% url 'main:all_user_batches' %}">Submit Task</a></li>
+              <li><a class="nav-link scrollto" href="{% url 'main:join_class_batch_student' %}">Join Batch/Class</a></li>
+              <li><a class="nav-link scrollto" href="{% url 'main:logout' %}">Logout</a></li>
+              <li><a class="getstarted scrollto" href="{% url 'main:user_profile_page' user_id=request.user.id %}">Welcome {{request.user.username|truncatechars:32}}</a></li>
+            </ul>  
+          {% else %}
+            <ul>
+              <li><a class="nav-link scrollto" href="/">Main Page</a></li>
+              <li><a class="nav-link " href="{% url 'main:faculty_home' %}">Home</a></li>
+              <li><a class="nav-link scrollto" href="{% url 'main:all_classes_teacher' %}">View Submissions</a></li>
+              <li><a class="nav-link scrollto" href="{% url 'main:view_schedule' %}">Plan Task</a></li>
+              <li><a class="nav-link scrollto" href="{% url 'main:add_task_page' %}">Create Task</a></li>
+              <li><a class="nav-link scrollto" href="{% url 'main:join_create' %}">Join/Create</a></li>
+              <li><a class="nav-link scrollto" href="{% url 'main:all_user_batches' %}">All Batches</a></li>
+              <li><a class="nav-link scrollto" href="{% url 'main:logout' %}">Logout</a></li>
+              <li><a class="getstarted scrollto" href="#">Welcome {{request.user.username|truncatechars:32}}</a></li>
+            </ul>                    
+          {% endif %}
+        {% else %}
+          <ul>
+            <li><a class="nav-link scrollto" href="/">Main Page</a></li>
+            <li><a class="nav-link " href="#about">About Us</a></li>
+            <li><a class="nav-link scrollto" href="#services">Features</a></li>
+            <li><a class="nav-link scrollto" href="#faq">FAQ</a></li>
+            <li><a class="nav-link scrollto" href="#ayush_contact">Contact</a></li>
+            <li class="dropdown"><a href="#"><span>Authentication</span> <i class="bi bi-chevron-right"></i></a>
+              <ul>
+                <li><a href="{% url 'main:login' %}">Login</a></li>
+                <li><a href="{% url 'main:register' %}">Register</a></li>
+              </ul>
+            </li>
+            <li><a class="getstarted scrollto" href="{% url 'main:login' %}">Get Started</a></li>
+          </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+        {% endif %}
+        
+      </nav><!-- .navbar -->
+
+    </div>
+  </header><!-- End Header -->
+
+  <!-- ======= Hero Section ======= -->
+  <section id="hero" class="d-flex align-items-center">
+
+    <div class="container">
+      <div class="row gy-4">
+        <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center">
+          <h1>Education Revolutionized with Eduvation </h1>
+          <h2>Eduvation is an online education forum. This forum helps in task management and task planning. </h2>
+          <div>
+            {% if user.is_authenticated == False %}
+            <a href="{% url 'main:login' %}" class="btn-get-started ">Get Started</a>
+            {% elif  request.user.extended_reverse.is_student %}
+            <a href="{% url 'main:student_home' %}" class="btn-get-started">Get Started</a>
+            {% else %}
+            <a href="{% url 'main:faculty_home' %}" class="btn-get-started">Get Started</a>
+            {% endif %}
+          </div>
+        </div>
+        <div class="col-lg-6 order-1 order-lg-2 hero-img">
+          <!--<img src="{% static 'bootstrap_template/assets/img/hero-img.svg' %}" class="img-fluid animated" alt="">-->
+          <img src="{% static 'others/images/front_page_images1/4905784.jpg' %}" class="img-fluid animated" alt="">
+        </div>
+      </div>
+    </div>
+
+  </section><!-- End Hero -->
+
+  <main id="main">
+
+    <!-- ======= About Section ======= -->
+    <section id="about" class="about">
+      <div class="container">
+
+        <div class="row justify-content-between">
+          <div class="col-lg-5 d-flex align-items-center justify-content-center about-img">
+            <img src="{% static 'bootstrap_template/assets/img/about-img.svg' %}" class="img-fluid" alt="" data-aos="zoom-in">
+          </div>
+          <div class="col-lg-6 pt-5 pt-lg-0">
+            <h3 data-aos="fade-up">Task planning, management and submission made much easier</h3>
+            <p data-aos="fade-up" data-aos-delay="100">
+              This education forum allows teachers to upload tasks,assignemnts and students to submit task.
+            </p>
+            <div class="row">
+              <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
+                <i class="bx bx-receipt"></i>
+                <h4>Task Management</h4>
+                <p> We have simplified the process of organizing task/homework submissions. </p>
+              </div>
+              <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
+                <i class="bx bx-calendar-week"></i>
+                <h4>Planning</h4>
+                <p>An interactive calendar based planner to plan tasks and distribute load accross the academic year.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End About Section -->
+
+    <!-- ======= Services Section ======= -->
+    <section id="services" class="services section-bg">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>Features</h2>
+          <p>Check out the great features we offer</p>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
+            <div class="icon-box">
+              <div class="icon"><i class="fas fa-sign-in-alt"></i></div>
+              <h4 class="title"><a href="">Join Once Only</a></h4>
+              <p class="description">No need to join 50+ classes during your entire course. Join a batch once to be a part of all the courses/ classes taught for that batch.</p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="200">
+            <div class="icon-box">
+              <div class="icon"><i class="bx bx-file"></i></div>
+              <h4 class="title"><a href="">Task Management</a></h4>
+              <p class="description">Management system to create tasks and manage submissions of tasks by your students</p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="300">
+            <div class="icon-box">
+              <div class="icon"><i class="bx bx-tachometer"></i></div>
+              <h4 class="title"><a href="">Stress Management</a></h4>
+              <p class="description">Interactive calendar to help you choose the optimal day for setting task deadline</p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="400">
+            <div class="icon-box">
+              <div class="icon"><i class="fas fa-check-double"></i></div>
+              <h4 class="title"><a href="">Grading</a></h4>
+              <p class="description">View students task submissions and grade them.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Services Section -->
+
+    <!-- ======= Team Section ======= -->
+    <section id="team" class="team">
+      <div class="container">
+
+        <div class="section-title" data-aos="fade-up">
+          <p>Trusted by teachers around the globe</p>
+        </div>
+
+        <div class="row">
+
+          <div class="col-xl-3 col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="100">
+            <div class="member">
+              <img src="{% static 'others/images/teachers/japanese.jpg' %}" style="height: 20vw;"  class="img-fluid" alt="">
+              <div class="member-info">
+                <div class="member-info-content">
+                  <h4>Akira Suzuki</h4>
+                  <span>Principal, Osaka High School, Japan</span>
+                </div>
+                <div class="social">
+                  <a href=""><i class="bi bi-twitter"></i></a>
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="200">
+            <div class="member">
+              <img src="{% static 'others/images/teachers/us.webp' %}" class="img-fluid" style="height: 20vw;" alt="">
+              <div class="member-info">
+                <div class="member-info-content">
+                  <h4>Sarah Jhonson</h4>
+                  <span>Education Officer, Virginia, US</span>
+                </div>
+                <div class="social">
+                  <a href=""><i class="bi bi-twitter"></i></a>
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="300">
+            <div class="member">
+              <img src="{% static 'others/images/teachers/uk.jpg' %}" style="height: 20vw;"  class="img-fluid" alt="">
+              <div class="member-info">
+                <div class="member-info-content">
+                  <h4>William Anderson</h4>
+                  <span>Headmaster, Mordalle High School, UK</span>
+                </div>
+                <div class="social">
+                  <a href=""><i class="bi bi-twitter"></i></a>
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="400">
+            <div class="member">
+              <img src="{% static 'others/images/teachers/indian.webp' %}"  class="img-fluid" style="height: 20vw;"  alt="">
+              <div class="member-info">
+                <div class="member-info-content">
+                  <h4>Richa Shukla</h4>
+                  <span>Xavier High School,Goa,India</span>
+                </div>
+                <div class="social">
+                  <a href=""><i class="bi bi-twitter"></i></a>
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Team Section -->
+
+    <!-- ======= F.A.Q Section ======= -->
+    <section id="faq" class="faq section-bg">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>F.A.Q</h2>
+          <p>Frequently Asked Questions</p>
+        </div>
+
+        <ul class="faq-list" data-aos="fade-up" data-aos-delay="100">
+    
+          <li>
+            <div data-bs-toggle="collapse" href="#faq5" class="collapsed question">How can I test this project? <i class="bi bi-chevron-down icon-show"></i><i class="bi bi-chevron-up icon-close"></i></div>
+            <div id="faq5" class="collapse" data-bs-parent=".faq-list">
+              <p>
+                For testing as a teacher join the batch ## using teacher's batch code ###. Then join class ### using teacher's code ### and class ### using teacher's code ### .<br/>
+                For tesing as a student join the batch ### using student's class code ###. You can also join class ### anonymously using code ###. <br>
+                As a teacher you can create your own classes and batches and share them. <br>
+                For more explanation follow this video <a href="#">Demo Video</a>
+
+              </p>
+            </div>
+          </li>
+
+          <li>
+            <div data-bs-toggle="collapse" class="collapsed question" href="#faq1">When was this project developed? <i class="bi bi-chevron-down icon-show"></i><i class="bi bi-chevron-up icon-close"></i></div>
+            <div id="faq1" class="collapse" data-bs-parent=".faq-list">
+              <p>
+                This project was developed as a part of Microsoft Engage Hackathon from November 8th 2021 to November 27th .
+              </p>
+            </div>
+          </li>
+
+          <li>
+            <div data-bs-toggle="collapse" href="#faq2" class="collapsed question">Can I have the developer contact info? <i class="bi bi-chevron-down icon-show"></i><i class="bi bi-chevron-up icon-close"></i></div>
+            <div id="faq2" class="collapse" data-bs-parent=".faq-list">
+              <p>
+                I am Ayush Ganguli currently a final year Information Technology student at NIT Raipur. For any queries you can email me at ayushganguli1769@gmail.com
+              </p>
+            </div>
+          </li>
+
+          <li>
+            <div data-bs-toggle="collapse" href="#faq3" class="collapsed question">What are the tech stack involved in this project? <i class="bi bi-chevron-down icon-show"></i><i class="bi bi-chevron-up icon-close"></i></div>
+            <div id="faq3" class="collapse" data-bs-parent=".faq-list">
+              <p>
+                The backend was developed using python's web framework Django. Frontend was developed using HTML(server side HTML generation involved), JavaScript(fetch api ), jquery, Bootstrap 5. Databases involved are PostgreSQL(sqlite locally) and firebase.
+              </p>
+            </div>
+          </li>
+
+          <li>
+            <div data-bs-toggle="collapse" href="#faq4" class="collapsed question">Is this website responsive? <i class="bi bi-chevron-down icon-show"></i><i class="bi bi-chevron-up icon-close"></i></div>
+            <div id="faq4" class="collapse" data-bs-parent=".faq-list">
+              <p>
+                This is basic prototype and I haven't made it mobile friendly yet. Please use the website with desktop only.
+              </p>
+            </div>
+          </li>
+
+          <li>
+            <div data-bs-toggle="collapse" href="#faq6" class="collapsed question">Is this project in production stage? <i class="bi bi-chevron-down icon-show"></i><i class="bi bi-chevron-up icon-close"></i></div>
+            <div id="faq6" class="collapse" data-bs-parent=".faq-list">
+              <p>
+                No, this is just a prototype.
+              </p>
+            </div>
+          </li>
+
+        </ul>
+
+      </div>
+    </section><!-- End F.A.Q Section -->
+
+
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+
+    <div class="footer-top" id="ayush_contact">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-3 col-md-6 footer-contact">
+            <h3>Eduvation</h3>
+            <p>
+              Ayush Ganguli <br>
+              National Institute of Technology, Raipur, Chhattisgarh<br>
+              India <br><br>
+              <strong>Email:</strong> ayushganguli1769@gmail.com<br>
+            </p>
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Github Link</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Video Demo</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Documentation</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">PPT Link</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="https://drive.google.com/file/d/1AS8OyyvplULmhJj0uTCQyJLWUr7yw07Z/view">My Resume</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Ayush Ganguli's Skills</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> Web Development</li>
+              <li><i class="bx bx-chevron-right"></i> Data Structure and Algorithms</li>
+              <li><i class="bx bx-chevron-right"></i> Object Oriented Programming</li>
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Ayush Ganguli's Social Networks</h4>
+            <p>I am active on github,linkedin and leetcode</p>
+            <div class="social-links mt-3">
+              <a href="https://github.com/ayushganguli1769" class="twitter"><i class="fab fa-github"></i></a>
+              <a href="https://leetcode.com/ayushganguli1769/" class="facebook"><span class="iconify" data-icon="simple-icons:leetcode"></span></a>
+              <a href="https://www.linkedin.com/in/ayush-ganguli-b39729192/" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+              <a href="https://drive.google.com/file/d/1AS8OyyvplULmhJj0uTCQyJLWUr7yw07Z/view" class="linkedin"><i class="fab fa-google-drive"></i>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container py-4">
+      <div class="copyright">
+        &copy; Copyright <strong><span>Eduvation</span></strong>. All Rights Reserved
+      </div>
+      <div class="credits">
+        Designed by <a href="https://www.linkedin.com/in/ayush-ganguli-b39729192/">Ayush Ganguli</a>
+      </div>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'bootstrap_template/assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'bootstrap_template/assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'bootstrap_template/assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'bootstrap_template/assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+  <script src="{% static 'bootstrap_template/assets/vendor/php-email-form/validate.js' %}"></script>
+  <script src="{% static 'bootstrap_template/assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="https://code.iconify.design/2/2.1.0/iconify.min.js"></script>
+
+
+  <!-- Template Main JS File -->
+  <script src="{% static 'bootstrap_template/assets/js/main.js' %}"></script>
+
+</body>
+
+</html>

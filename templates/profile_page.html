@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block style_sheet %}
+    {% load static %}
+    <style>
+        body{
+            background-color: #ffc107;
+        }
+    </style>
+{% endblock style_sheet %}
+{% block main_code %}
+<center>
+<div class=" m-0">
+    <div class="col-4">
+        <div class="card" >
+            {% if curr_user.extended_reverse.image %}
+            <img class="card-img-top img-fluid" src="{{curr_user.extended_reverse.image.url}}" style="height: 50vh;" alt="Card image">
+            {% elif curr_user.extended_reverse.is_student %}
+            <img class="card-img-top img-fluid" src="{% static 'others/images/teachers/student.png' %} " style="height: 50vh;" alt="Card image">
+            {% else %}
+            <img class="card-img-top img-fluid" src="{% static 'others/images/teachers/teacher_profile_photo.jpg' %} " style="height: 50vh;" alt="Card image">    
+            {% endif %}
+            <div class="card-body">
+                <div class="row ml-2 mr-2">
+                    <div class="col-12">
+                        <h3><span class="badge rounded-pill bg-success col-12">Username: {{curr_user.username}}</span></h3>
+                    </div>
+                </div>
+                <div class="row ml-2 mr-2">
+                    <div class="col-12">
+                        <h3><span class="badge rounded-pill bg-success col-12">First Name:  {{curr_user.first_name}}</span></h3>
+                    </div>
+                </div> 
+                <div class="row ml-2 mr-2">
+                    <div class="col-12">
+                        <h3><span class="badge rounded-pill bg-success col-12">Last Name:  {{curr_user.last_name}}</span></h3>
+                    </div>
+                </div>
+                <div class="row ml-2 mr-2">
+                    <div class="col-12">
+                        <h3><span class="badge rounded-pill bg-success col-12">Email:  {{curr_user.email}}</span></h3>
+                    </div>
+                </div>  
+                <div class="row ml-2 mr-2">
+                    <div class="col-12">
+                        <h3><span class="badge rounded-pill bg-success col-12">{% if curr_user.extended_reverse.is_student %}Student Member {% else %} Faculty Member{% endif %}</span></h3>
+                    </div>
+                </div>            
+            </div>
+        </div>
+    </div>
+</div>
+</center>
+</div>
+{% endblock main_code %}
+{% block java_script %}
+
+{% endblock java_script %}
